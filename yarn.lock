@@ -5638,7 +5638,7 @@ promise@^8.0.3:
   dependencies:
     asap "~2.0.6"
 
-prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.5.10, prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -5755,6 +5755,20 @@ react-native-iphone-x-helper@^1.3.0:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.3.1.tgz#20c603e9a0e765fd6f97396638bdeb0e5a60b010"
   integrity sha512-HOf0jzRnq2/aFUcdCJ9w9JGzN3gdEg0zFE4FyYlp4jtidqU03D5X7ZegGKfT1EWteR0gPBGp9ye5T5FvSWi9Yg==
+
+react-native-material-color-picker@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-material-color-picker/-/react-native-material-color-picker-1.0.1.tgz#a89892e45a2e26aa423b0442ee49e5cc036604dd"
+  integrity sha512-RXGr0bBxhpTkmgjO3tJiGBOjdlK2ztd3fC1F2cB5SwsIDdzJWRUoyVGPzYCdaw9azN3Ht+6ujXyYgZazn5itgA==
+  dependencies:
+    lodash "^4.17.15"
+    prop-types "^15.5.10"
+    react-native-material-color "1.0.15"
+
+react-native-material-color@1.0.15:
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/react-native-material-color/-/react-native-material-color-1.0.15.tgz#c90753a049087cae94d38c85bc7f4b2c62bacda0"
+  integrity sha1-yQdToEkIfK6U04yFvH9LLGK6zaA=
 
 react-native-ratings@^7.3.0:
   version "7.6.1"
