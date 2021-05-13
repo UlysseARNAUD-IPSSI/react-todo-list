@@ -1,3 +1,6 @@
+import Task from './Task'
+import uuidv4 from '../utils/uuidv4'
+
 export default class List {
 
     constructor(params) {
@@ -7,7 +10,7 @@ export default class List {
             title: 'Nom de la liste', // "Nom de la tâche"
             description: 'Description de la liste', // "Description de la tâche"
             created_at: Date.now().toLocaleString('fr-FR'), // 10/05/2021
-            tasks: []
+            data: []
         }
 
         params = {
@@ -22,15 +25,22 @@ export default class List {
     }
 
     addTask(task) {
-        this.tasks.push(task)
+        this.data.push(task)
     }
 
     removeTask(task) {
         // TODO : Gérer la comparaison entre deux tâches
-        this.tasks = this.tasks.filter(entry => entry !== task)
+        this.data = this.data.filter(entry => entry !== task)
     }
 
     getTasks() {
-        return this.tasks
+        return this.data
+    }
+
+    get() {
+        return {
+            title: this.title,
+            data: this.data.map(entry => entry.get())
+        }
     }
 }

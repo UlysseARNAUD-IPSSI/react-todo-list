@@ -1,3 +1,4 @@
+import uuidv4 from '../utils/uuidv4'
 
 export default class Task {
 
@@ -22,6 +23,13 @@ export default class Task {
             this[property] = params[property]
         }
 
+    }
+
+    get() {
+        return {
+            id: this.id,
+            name : this.name
+        }
     }
 
 }
