@@ -69,12 +69,6 @@ export default function HomeScreen() {
 
     }, [])
 
-    const ListItem = ({item: {completed, total}}) => (
-        <View style={styles.item}>
-            <Text style={styles.itemCardText}>92 {"\n"} Tâches accomplies</Text>
-        </View>
-    )
-
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView
@@ -96,87 +90,54 @@ export default function HomeScreen() {
                     stickySectionHeadersEnabled={false}
                     sections={[
                         {
-                            title: "Main dishes",
-                            data: [
-                                {
-                                    key: '1',
-                                    completed: 0,
-                                    total: 92
-                                },
-                                {
-                                    key: '2',
-                                    completed: 0,
-                                    total: 92
-                                }
-                            ]
+                            title: "Liste 1",
+                            total: 92,
+                            completed: 1,
+                            data: []
                         },
                         {
-                            title: "Sides",
-                            data: [
-                                {
-                                    key: '1',
-                                    completed: 0,
-                                    total: 92
-                                },
-                                {
-                                    key: '2',
-                                    completed: 0,
-                                    total: 92
-                                }
-                            ]
+                            title: "Liste 2",
+                            total: 92,
+                            completed: 1,
+                            data: []
                         },
                         {
-                            title: "Drinks",
-                            data: [
-                                {
-                                    key: '1',
-                                    completed: 0,
-                                    total: 92
-                                },
-                                {
-                                    key: '2',
-                                    completed: 0,
-                                    total: 92
-                                }
-                            ]
+                            title: "Liste 3",
+                            total: 92,
+                            completed: 1,
+                            data: []
                         },
                         {
-                            title: "Desserts",
-                            data: [
-                                {
-                                    key: '1',
-                                    completed: 0,
-                                    total: 92
-                                },
-                                {
-                                    key: '2',
-                                    completed: 0,
-                                    total: 92
-                                }
-                            ]
+                            title: "Liste 4",
+                            total: 92,
+                            completed: 1,
+                            data: []
                         }
                     ]}
                     keyExtractor={(item, index) => item + index}
                     renderItem={({item, section}) => {
                         return null;
                     }}
-                    renderSectionHeader={({section: {title,data}}) => (
+                    renderSectionHeader={({section: {title,total,completed}}) => (
                         <>
                             <Text style={styles.listTitle}>{title}</Text>
                             <FlatList
                                 horizontal
                                 data={[
                                     {
+                                        slug: 'total',
+                                        text: 'Tâches (total)',
+                                        value: total
+                                    },
+                                    {
+                                        slug: 'completed',
                                         text: 'Tâches accomplies',
-                                        value: 0
+                                        value: completed,
                                     },
                                     {
+                                        slug: 'remaining',
                                         text: 'Tâches restantes',
-                                        value: 0,
-                                    },
-                                    {
-                                        text: 'Tâches restantes',
-                                        value: 0
+                                        value: parseInt(total) - parseInt(completed)
                                     }
                                 ]}
                                 renderItem={({item: {value,text}}) => <>
