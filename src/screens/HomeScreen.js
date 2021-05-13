@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.primary,
         color: colors.text,
         padding: 20,
-        marginHorizontal: 8
+        marginRight: 8
     },
     listTitle: {
         fontSize: 24,
@@ -33,6 +33,10 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         flex: 1,
         textAlign: 'center'
+    },
+    list: {
+        marginBottom: 16,
+        flex: 1
     }
 })
 
@@ -119,7 +123,7 @@ export default function HomeScreen() {
                         return null;
                     }}
                     renderSectionHeader={({section: {title,total,completed}}) => (
-                        <>
+                        <SafeAreaView style={styles.list}>
                             <Text style={styles.listTitle}>{title}</Text>
                             <FlatList
                                 horizontal
@@ -145,9 +149,8 @@ export default function HomeScreen() {
                                         <Text style={styles.itemCardText}>{value}{"\n"}{text}</Text>
                                     </View>
                                 </>}
-                                showsHorizontalScrollIndicator={false}
-                            />
-                        </>
+                                showsHorizontalScrollIndicator={false} />
+                        </SafeAreaView>
                     )}
                 />
 

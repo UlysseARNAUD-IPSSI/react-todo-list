@@ -10,7 +10,11 @@ import HomeScreen from './src/screens/HomeScreen'
 import ListDetailsScreen from './src/screens/ListDetailsScreen'
 import TaskDetailsScreen from './src/screens/TaskDetailsScreen'
 
+import uuidv4 from './src/utils/uuidv4'
+
+
 global.Fire = new Fire
+global.uuidv4 = uuidv4
 
 
 const Stack = createStackNavigator()
@@ -37,12 +41,5 @@ export default function App() {
                 </Stack.Navigator>
             </NavigationContainer>
         </>
-    )
-}
-
-
-window.uuidv4 = function () {
-    return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
-        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
     )
 }
