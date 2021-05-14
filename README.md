@@ -11,15 +11,12 @@
 - [ ] Easter egg
 - [ ] Utilisation d'une API quelconque
 
+
+### Installation
+
+1. Cloner le répertoire
+2. Aller dans le répertoire `todo-leviosa`
+3. Installer les dépendances NPM :  `yarn`
+4. Démarrer expo : `expo start`
+
 ### Fonctionnement
-
-
-
-### Changelog
-
-* 10 mai 2021 :
-    - Création du répertoire et initialisation du projet via `expo init`.
-
-* 11 mai 2021 :
-    - Création des entités Task et List.
-      Des méthodes "addTask" et "removeTask" sont créées dans l'entité List permettant la gestion de ses tâches.

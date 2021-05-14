@@ -1,235 +1,84 @@
-import firebase from 'firebase'
-
-/**
- * Firebase helper class
+/*
+ * Code source provenance de https://github.com/bellifa96/toDoList/blob/main/Fire.js
+ * dans le but de résoudre l'intégration de Firebase (erreur app/no-app)
  */
+
+import firebase from "firebase"
+import '@firebase/firestore'
+
+const firebaseConfig = {
+    apiKey: "AIzaSyC56I-vmPGWK0XIC7QgxP35jnzChYiq-ls",
+    authDomain: "todo-leviosa.firebaseapp.com",
+    projectId: "todo-leviosa",
+    storageBucket: "todo-leviosa.appspot.com",
+    messagingSenderId: "973875357327",
+    appId: "1:973875357327:web:b04403a3e736a66b0a32fa"
+}
+
 export default class Fire {
 
-    /**
-     * @constructor
-     * @returns {Fire}
-     */
-    constructor() {
-        // Do something ?
+    app = undefined
+
+    constructor(callback) {
+        this.init(callback)
     }
 
-    /**
-     * Sets callback
-     * @param callback {Function}
-     */
-    set callback (callback) {
-        this._callback = callback
-    }
-
-    get callback () {
-        return this._callback
-    }
-
-    /**
-     * Initializes Firebase
-     * @param callback
-     */
-    initialize(callback = null) {
-
-        if (!callback) {
-            callback = this.callback
+    init(callback) {
+        if (!firebase.apps.length) {
+            this.app = firebase.initializeApp(firebaseConfig)
         }
 
-        if ('function' !== typeof callback) {
-            firebase.auth().signInAnonymously().catch(console.error)
-            return
-        }
-
-        firebase
-            .auth()
-            .onAuthStateChanged(user => {
-                if (user) callback(null)
-                else firebase.auth().signInAnonymously().catch(callback)
-            })
-
-        return new Proxy(this, {
-            get: function (instance, field) {
-                if (field in instance) return instance[field]
-                console.debug(`Tentative d'accèes à la propriété "${field}" n'est pas définie dans la classe Fire`)
-
-                instance.refName = field
-
-                return instance
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                callback(null)
+            } else {
+                firebase.auth().signInAnonymously().catch(error => {
+                    callback(error)
+                })
             }
         })
-
     }
 
-    /**
-     * Gets reference name (could be 'lists')
-     * @returns {*}
-     */
-    get refName() {
-        return this._refName
-    }
-
-    /**
-     * Sets reference name.
-     * Parameter 'name' could be 'lists'.
-     * @param name
-     */
-    set refName(name) {
-        this._refName = name
-    }
-
-    /**
-     * Gets Reference
-     * @returns {firebase.firestore.CollectionReference<firebase.firestore.DocumentData>}
-     */
     get ref() {
-        return firebase.firestore().collection(this._refName);
+        return firebase.firestore(this.app).collection('lists');
     }
 
-    /**
-     * Get Collection from firestore
-     * @param callback {function}
-     * @param parameters {{
-     *  orderBy: string|null,
-     *  selector: string|null,
-     *  onNext: function(snapshot),
-     *  onError: function(error)
-     * }}}
-     */
-    get(callback, parameters = {}) {
-        const defaultParameters = {
-            orderBy: 'name',
-            selector: null,
-            onNext(snapshot) {
-                let collection = []
-
-                snapshot.forEach(doc => {
-                    collection.push({
-                        id: doc.id,
-                        ...doc.data()
-                    })
-                })
-
-                callback(collection)
-            },
-            onError(error) {
-                console.error(error)
-            }
-        }
-
-        parameters = {
-            ...defaultParameters,
-            ...parameters
-        }
-
-        const {orderBy, selector, onNext, onError} = parameters
-
-        let unsubscribe = this.ref
-        if (selector) unsubscribe = unsubscribe.doc(selector)
-        if (orderBy) unsubscribe = unsubscribe.orderBy(orderBy)
-        if (onNext && onError) unsubscribe = unsubscribe.onSnapshot(onNext, onError)
-
-        this.unsubscribe = unsubscribe
+    getLists(callback) {
+        let ref = this.ref.orderBy('name')
+        this.unsubscribe = ref.onSnapshot(snapshot => {
+            let lists = []
+            snapshot.forEach(doc => {
+                lists.push({id: doc.id, ...doc.data()})
+            })
+            callback(lists)
+        }, error => {
+            console.error(error)
+        })
     }
 
-    /**
-     * Add Document Reference
-     * @param doc
-     * @param parameters
-     */
-    add(doc, parameters = {}) {
-        const defaultParameters = {
-            docConfig: null,
-            onAdd(response) {
-                console.debug(`onAdd: Response ${response.toString()}`)
-            }
-        }
+    async addList(list) {
+        const ref = this.ref
+        await ref.add(list)
 
-        parameters = {
-            ...defaultParameters,
-            ...parameters
-        }
-
-        const {docConfig, onAdd} = parameters
-
-        this.getDocumentReference(doc, docConfig).then(onAdd)
     }
 
-    /**
-     * Update document reference
-     * @param doc
-     * @param parameters {{ selector: string }}
-     */
-    update(doc, parameters = {}) {
-        const defaultParameters = {
-            docConfig: null
-        }
-
-        parameters = {
-            ...defaultParameters,
-            ...parameters
-        }
-
-        const {docConfig} = parameters
-
-        this.getDocumentReference(doc, docConfig).update(doc)
+    async deleteList(list) {
+        const ref = this.ref
+        await ref.doc(list.id).delete()
     }
 
-    /**
-     * Delete document reference
-     * @param doc
-     * @param parameters
-     */
-    delete(doc, parameters = {}) {
-        const defaultParameters = {
-            docConfig: null
-        }
-
-        parameters = {
-            ...defaultParameters,
-            ...parameters
-        }
-
-        const {docConfig} = parameters
-
-        this.getDocumentReference(doc, docConfig).delete()
+    async updateList(list) {
+        const ref = this.ref
+        await ref.doc(list.id).update(list)
     }
 
-    /**
-     * Detach instance
-     */
     detach() {
         this.unsubscribe()
     }
 
-
-    /**
-     * Get Document reference
-     * @param documentReference
-     * @param parameters
-     * @returns {firebase.firestore.DocumentReference<firebase.firestore.DocumentData>}
-     */
-    getDocumentReference(documentReference, parameters) {
-        const defaultParameters = {
-            selector: 'id'
-        }
-
-        parameters = {
-            ...defaultParameters,
-            ...parameters
-        }
-
-        const {selector} = parameters
-
-        return this.ref.doc(documentReference[selector])
-    }
-
-    setCallback(callback) {
-        this.callback = callback
-        return this
-    }
-
-    setRefName(refName) {
-        this.refName = refName
-        return this
+    getOneList(id,callback) {
+        const ref = this.ref.doc(id).onSnapshot(list => {
+            callback(list.data())
+        })
     }
 }

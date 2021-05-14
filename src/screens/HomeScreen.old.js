@@ -17,7 +17,7 @@ import React, {useState, useEffect} from 'react'
 import ColorPicker from 'react-native-material-color-picker'
 import List from '../models/List'
 import getContrast from "../utils/get-contrast"
-import dictionary from "../utils/point-godwin-dictionary";
+import dictionary from "../utils/point-godwin-dictionary"
 
 const colors = {
     darkPrimary: '#303F9F',
@@ -132,7 +132,7 @@ export default function HomeScreen({navigation}) {
     const [lists, setLists] = useState([])
     const [modalAddListVisible, setModalAddVisible] = useState(false)
     const [modalRemoveListVisible, setModalRemoveVisible] = useState(false)
-    const [selectedListToRemove, setSelectedListToRemove] = useState(undefined)
+    const [selectedListToRemove, setSelectedListToRemove] = useState(null)
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true)
@@ -158,6 +158,16 @@ export default function HomeScreen({navigation}) {
         })*/
 
     })
+
+    const onPressList = (list) => {
+        selectedList = list
+        navigation.navigate('ListDetails', {list})
+    }
+
+    const onLongPressList = (list) => {
+        setSelectedListToRemove(list)
+        setModalRemoveVisible(true)
+    }
 
     const onPressAddList = () => {
         setModalAddVisible(true)
@@ -196,7 +206,7 @@ export default function HomeScreen({navigation}) {
         for (let word of words) {
             if (new RegExp(word.toLowerCase()).test(listName.toLowerCase())) {
                 Alert.alert('Congratulation !', 'You won 1 point Godwin !') || alert('Congratulation ! You won 1 point Godwin !')
-                ++pointsGodwin
+                // pointsGodwin = pointsGodwin + 1
                 break
             }
         }
@@ -333,10 +343,6 @@ export default function HomeScreen({navigation}) {
                 showsVerticalScrollIndicator={false}
                 nestedScrollEnabled={true}>
 
-
-                <Text style={{marginTop:-32}}>You have <Text style={{fontWeight:'bold'}}>{pointsGodwin}</Text> points Godwin</Text>
-
-
                 <Pressable
                     onPress={onPressAddList}
                     style={[styles.button, styles.buttonOpen]}
@@ -365,14 +371,8 @@ export default function HomeScreen({navigation}) {
                     renderSectionHeader={({section}) => (
                         <SafeAreaView style={styles.list}>
                             <TouchableOpacity
-                                onLongPress={() => {
-                                    setSelectedListToRemove(section)
-                                    setModalRemoveVisible(true)
-                                }}
-                                onPress={(list) => {
-                                    selectedList = list
-                                    navigation.navigate('ListDetails', {list})
-                                }}
+                                onLongPress={onLongPressList(section)}
+                                onPress={onPressList(section)}
                                 delayLongPress={1000}
                                 activeOpacity={0.6}
                                 style={styles.buttonStyle}>

@@ -23,10 +23,10 @@ const styles = StyleSheet.create({
 })
 
 
-export default function ListDetailsScreens() {
+export default function ListDetailsScreens({list}) {
 
     const [refreshing, setRefreshing] = useState(false)
-    const [lists, setLists] = useState([])
+    const [currentList, setCurrentList] = useState(list)
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true)
@@ -35,21 +35,6 @@ export default function ListDetailsScreens() {
 
         setRefreshing(false)
     }, [])
-
-    useEffect (() => {
-        firebase = new Fire(error => {
-            if (error) return alert("Une erreur est survenue");
-
-            firebase.getLists(lists => {
-                setLists(lists);
-                setLoading(false);
-            });
-
-            return function unsubscribe () {
-                firebase.detach();
-            }
-        })
-    }, []);
 
     return (
         <SafeAreaView style={styles.container}>

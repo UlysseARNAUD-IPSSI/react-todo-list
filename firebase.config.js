@@ -1,20 +1,10 @@
-import firebase from 'firebase';
-import '@firebase/auth';
-import '@firebase/firestore';
-
 const firebaseConfig = {
-    apiKey: "AIzaSyB6qdEbO7i44dLczVsbN5wQhpAt9BIZIZU",
-    authDomain: "react-todo-list-656bd.firebaseapp.com",
-    projectId: "react-todo-list-656bd",
-    storageBucket: "react-todo-list-656bd.appspot.com",
-    messagingSenderId: "234487312467",
-    appId: "1:234487312467:web:48f90a9827baf648a156a6"
-};
-
-console.log(firebase)
-
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
+    apiKey: "AIzaSyC56I-vmPGWK0XIC7QgxP35jnzChYiq-ls",
+    authDomain: "todo-leviosa.firebaseapp.com",
+    projectId: "todo-leviosa",
+    storageBucket: "todo-leviosa.appspot.com",
+    messagingSenderId: "973875357327",
+    appId: "1:973875357327:web:b04403a3e736a66b0a32fa"
 }
 
-export default firebase
+export default firebaseConfig
